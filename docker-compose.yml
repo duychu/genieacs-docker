@@ -20,7 +20,7 @@ services:
     genieacs:
         depends_on:
             - 'mongo'
-        image: duychu/genieacs:1.1
+        image: duycb92/genieacs:1.1
         container_name: "genieacs"
         ports:
             - "7547:7547"

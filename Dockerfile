@@ -3,7 +3,7 @@
 
 # Dockerfile of node:8-stretch here: https://github.com/nodejs/docker-node/blob/526c6e618300bdda0da4b3159df682cae83e14aa/8/stretch/Dockerfile
 FROM node:8-stretch
-LABEL maintainer="acsdesk@protonmail.com"
+LABEL maintainer="duycb92@gmail.com"
 
 RUN apt-get update && apt-get install -y sudo apt-transport-https apt-utils supervisor
 RUN mkdir -p /var/log/supervisor
@@ -16,15 +16,7 @@ RUN ln -s /usr/local/share/.config/yarn/global/node_modules/genieacs /opt
 
 ## Change config.json ##
 WORKDIR /opt/genieacs/config
-RUN openssl genrsa 2048 > cwmp.key
-RUN openssl req -new -x509 -days 10000 -key cwmp.key -subj "/C=ES/O=ACSdesk/emailAddress=acsdesk@protonmail.com" > cwmp.crt
-RUN cp cwmp.crt nbi.crt && cp cwmp.key nbi.key && cp cwmp.crt fs.crt && cp cwmp.key fs.key
-#RUN sed -i 's/mongodb:\/\/127.0.0.1\/genieacs/mongodb:\/\/user:password@127.0.0.1\/genieacs/' config.json
-RUN sed -i 's/mongodb:\/\/127.0.0.1\/genieacs/mongodb:\/\/mongo\/genieacs/' config.json
-RUN sed -i 's/acs.example.com/acs.local/' config.json
-RUN sed -i '0,/false/ s/false/true/' config.json ## Changes first occurence of "false" in SSL on CWMP
-#RUN sed -i '8i\ \ "NBI_SSL" : true,' config.json
-#RUN sed -i '12i\ \ "FS_SSL" : true,' config.json
+COPY config.json config.json
 
 # Install GenieACS-GUI #
 RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
